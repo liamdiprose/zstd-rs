@@ -193,6 +193,7 @@ fn compile_zstd() {
     // #[cfg(feature = "zdict_builder")]
     // fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
     println!("cargo:root={}", dst.display());
+    eprintln!("Finished compile_zstd");
 }
 
 fn main() {
@@ -227,5 +228,7 @@ fn main() {
         .collect();
     println!("cargo:include={}", includes.join(";"));
 
+    eprintln!("Generating bindings: {:?}", &headerpaths);
     generate_bindings(defs, headerpaths);
+    eprintln!("Finished zstd-sys build.rs main");
 }
