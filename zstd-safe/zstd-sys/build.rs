@@ -203,10 +203,25 @@ fn compile_zstd() {
     eprintln!("zstd_errors_h done");
 
     #[cfg(feature = "zdict_builder")]
-    fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
+    {
+        let zdict_h = include.join("zdict.h");
+        fs::copy(src.join("zdict.h"), &zdict_h).unwrap();
+        let mut perms3 = fs::metadata(&zdict_h).expect("Couldn't get permissions for zdict.h file").permissions();
+        perms3.set_readonly(false);
+        fs::set_permissions(&zdict_h, perms3).expect("Couldnt' set permissoins for destination header file");
+        eprintln!("zdict_h done");
+    }
+
     println!("cargo:root={}", dst.display());
     eprintln!("Finished compile_zstd");
 }
+
+// fn ensure_writable<P: AsRef<Path>>(filename: &P) {
+//     let mut perms = fs::metadata(&zstd_errors_h).expect("Couldn't get permissions for zstd_errors.h file").permissions();
+//     perms2.set_readonly(false);
+//     fs::set_permissions(&zstd_errors_h, perms2).expect("Couldnt' set permissoins for destination header file");
+// }
+
 
 fn main() {
     let target_arch =
