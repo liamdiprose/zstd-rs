@@ -181,7 +181,13 @@ fn compile_zstd() {
     let dst = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let include = dst.join("include");
     fs::create_dir_all(&include).unwrap();
-    fs::copy(src.join("zstd.h"), include.join("zstd.h")).unwrap();
+
+    let src_header = src.join("zstd.h");
+    let dst_header = include.join("zstd.h");
+
+    eprintln!("Copying {} to {}", &src_header, &dst_header);
+
+    fs::copy(src_header, dst_header).unwrap();
     fs::copy(src.join("zstd_errors.h"), include.join("zstd_errors.h"))
         .unwrap();
     #[cfg(feature = "zdict_builder")]
