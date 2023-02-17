@@ -187,7 +187,7 @@ fn compile_zstd() {
     let dst_header = include.join("zstd.h");
     eprintln!("Copying {} to {}", &src_header.display(), &dst_header.display());
 
-    fs::copy(src_header, dst_header).unwrap();
+    fs::copy(src_header, &dst_header).unwrap();
     let mut perms = fs::metadata(&dst_header).expect("Couldn't get permissions for destination header file").permissions();
     eprintln!("Setting readonly=false");
     perms.set_readonly(false);
