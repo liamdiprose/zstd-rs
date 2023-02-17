@@ -199,7 +199,7 @@ fn compile_zstd() {
     fs::copy(src.join("zstd_errors.h"), &zstd_errors_h).unwrap();
     let mut perms2 = fs::metadata(&zstd_errors_h).expect("Couldn't get permissions for zstd_errors.h file").permissions();
     perms2.set_readonly(false);
-    fs::set_permissions(&zstd_errors_h, perms).expect("Couldnt' set permissoins for destination header file");
+    fs::set_permissions(&zstd_errors_h, perms2).expect("Couldnt' set permissoins for destination header file");
     eprintln!("zstd_errors_h done");
 
     #[cfg(feature = "zdict_builder")]
