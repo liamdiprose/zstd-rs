@@ -185,7 +185,7 @@ fn compile_zstd() {
     let src_header = src.join("zstd.h");
     let dst_header = include.join("zstd.h");
 
-    eprintln!("Copying {} to {}", &src_header, &dst_header);
+    eprintln!("Copying {} to {}", &src_header.display(), &dst_header.display());
 
     fs::copy(src_header, dst_header).unwrap();
     fs::copy(src.join("zstd_errors.h"), include.join("zstd_errors.h"))
