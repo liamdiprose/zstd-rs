@@ -180,18 +180,18 @@ fn compile_zstd() {
     let src = env::current_dir().unwrap().join("zstd").join("lib");
     let dst = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let include = dst.join("include");
+    eprintln!("Creating {}", &include.display());
     fs::create_dir_all(&include).unwrap();
 
     let src_header = src.join("zstd.h");
     let dst_header = include.join("zstd.h");
-
     eprintln!("Copying {} to {}", &src_header.display(), &dst_header.display());
+    // fs::copy(src_header, dst_header).unwrap();
 
-    fs::copy(src_header, dst_header).unwrap();
-    fs::copy(src.join("zstd_errors.h"), include.join("zstd_errors.h"))
-        .unwrap();
-    #[cfg(feature = "zdict_builder")]
-    fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
+    // fs::copy(src.join("zstd_errors.h"), include.join("zstd_errors.h"))
+        // .unwrap();
+    // #[cfg(feature = "zdict_builder")]
+    // fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
     println!("cargo:root={}", dst.display());
 }
 
