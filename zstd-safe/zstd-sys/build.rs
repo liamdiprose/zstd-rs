@@ -186,12 +186,24 @@ fn compile_zstd() {
     let src_header = src.join("zstd.h");
     let dst_header = include.join("zstd.h");
     eprintln!("Copying {} to {}", &src_header.display(), &dst_header.display());
-    // fs::copy(src_header, dst_header).unwrap();
 
-    // fs::copy(src.join("zstd_errors.h"), include.join("zstd_errors.h"))
-        // .unwrap();
-    // #[cfg(feature = "zdict_builder")]
-    // fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
+    fs::copy(src_header, dst_header).unwrap();
+    let mut perms = fs::metadata(&dst_header).expect("Couldn't get permissions for destination header file").permissions();
+    eprintln!("Setting readonly=false");
+    perms.set_readonly(false);
+    fs::set_permissions(dst_header, perms).expect("Couldnt' set permissoins for destination header file");
+    eprintln!("zstd_h done");
+
+    let zstd_errors_h = include.join("zstd_errors.h");
+    eprintln!("Copying ... to {}", &zstd_errors_h.display());
+    fs::copy(src.join("zstd_errors.h"), &zstd_errors_h).unwrap();
+    let mut perms2 = fs::metadata(&zstd_errors_h).expect("Couldn't get permissions for zstd_errors.h file").permissions();
+    perms2.set_readonly(false);
+    fs::set_permissions(&zstd_errors_h, perms).expect("Couldnt' set permissoins for destination header file");
+    eprintln!("zstd_errors_h done");
+
+    #[cfg(feature = "zdict_builder")]
+    fs::copy(src.join("zdict.h"), include.join("zdict.h")).unwrap();
     println!("cargo:root={}", dst.display());
     eprintln!("Finished compile_zstd");
 }
